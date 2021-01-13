@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-app-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kube-app-client
+  template:
+    metadata:
+      labels:
+        app: kube-app-client
+    spec:
+      containers:
+      - name: kube-app-client
+        image: asarkisjan/kube-client:1.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 3000 
+        resources:
+          limits:
+            cpu: '0.2'
+            memory: "200Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-app-client
+spec:
+  type: NodePort              
+  selector:
+    app: kube-app-client
+  ports:                   
+  - name: http
+    port: 80
+    targetPort: 80      
