@@ -1,0 +1,16 @@
+secretGenerator:
+  - name: mysql-db-url
+    literals:
+    - database=kube_db
+    - url=jdbc:mysql://kube-app-mysql:3306/kube_db
+  - name: mysql-root-pass
+    literals:
+    - password=root
+  - name: mysql-user-pass
+    literals:
+    - username=person
+    - password=person 
+resources:
+  - mysql-deployment.yaml
+  - kube-server-deployment.yaml
+  - kube-client-deployment.yaml  
