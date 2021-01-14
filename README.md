@@ -11,11 +11,15 @@ minikube start
 ```
 kubectl apply -k .\deployments\
 ```
-### 3. Visit client service via NodePort
+### 3. Map localhost:8080 endpoint to backend service 
+```
+kubectl port-forward service/kube-app-server 8080:8080
+```
+### 4. Visit client service via NodePort
 ```
 minikube service kube-app-client
 ```
-### 4. Cleaning up
+### 5. Cleaning up
 ```
 kubectl delete -k .\deployments\
 ```
