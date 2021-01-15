@@ -29,7 +29,7 @@ kind: Service
 metadata:
   name: kube-app-client
 spec:
-  type: NodePort              
+  type: ClusterIP              
   selector:
     app: kube-app-client
   ports:                   
