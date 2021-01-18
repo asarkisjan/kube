@@ -23,8 +23,6 @@ services:
     build:
       context: kube-app 
       dockerfile: Dockerfile
-      args:
-        REACT_APP_API_BASE_URL: http://127.0.0.1:8080/api
     ports:
       - "3000:80" 
     restart: always

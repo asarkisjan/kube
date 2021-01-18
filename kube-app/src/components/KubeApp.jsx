@@ -9,13 +9,13 @@ const KubeApp = () => {
   useEffect(() => {
     PersonDataService.retrieveAllPersons()
       .then((response) => setAllPersons(response.data))
-      .catch((error) => console.log(error));
+      .catch(() => {});
   }, []);
 
   return (
     <Container>
-      <h1>Kube</h1>
-
+      <h1>Kube v3</h1>
+      {console.log(allPersons)}
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -25,7 +25,7 @@ const KubeApp = () => {
           </tr>
         </thead>
         <tbody>
-          {allPersons.map((person, index) => (
+          {Array.isArray(allPersons) && allPersons.map((person, index) => (
             <tr key={index}>
               <td>{person.id}</td>
               <td>{person.name}</td>
