@@ -3,8 +3,6 @@ package com.template.kube.events;
 import com.template.kube.model.Person;
 import com.template.kube.service.SequenceGeneratorService;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
@@ -22,6 +20,6 @@ public class PersonModelListener extends AbstractMongoEventListener<Person> {
 
     @Override
     public void onBeforeConvert(BeforeConvertEvent<Person> event) {
-            event.getSource().setId(sequenceGenerator.generateSequence(Person.SEQUENCE_NAME));        
+        event.getSource().setId(sequenceGenerator.generateSequence(Person.SEQUENCE_NAME));
     }
 }
