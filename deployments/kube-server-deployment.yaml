@@ -16,7 +16,7 @@ spec:
     spec:                     
       containers:
       - name: kube-app-server
-        image: asarkisjan/kube-server:1.0.1
+        image: asarkisjan/kube-server:2.0.0
         imagePullPolicy: IfNotPresent
         ports:
           - name: http
@@ -26,21 +26,8 @@ spec:
             cpu: '0.2'
             memory: "200Mi"
         env:                  
-        - name: SPRING_DATASOURCE_USERNAME
-          valueFrom:         
-            secretKeyRef:
-              name: mysql-user-pass
-              key: username
-        - name: SPRING_DATASOURCE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mysql-user-pass
-              key: password
-        - name: SPRING_DATASOURCE_URL
-          valueFrom:
-            secretKeyRef:
-              name: mysql-db-url
-              key: url
+          - name: MONGO_URI
+            value: "mongodb://kube-app-mongo/kube_db"
 ---
 apiVersion: v1          
 kind: Service                 

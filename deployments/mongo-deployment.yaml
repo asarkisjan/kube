@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: mysql-pv
+  name: mongo-pv
   labels:
     type: local
 spec:
@@ -17,7 +17,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata: 
-  name: mysql-pv-claim
+  name: mongo-pv-claim
   labels:
     app: kube-app
 spec:
@@ -31,67 +31,46 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: kube-app-mysql
+  name: kube-app-mongo
   labels:
     app: kube-app
 spec:
   ports:
-    - port: 3306
+    - port: 27017
   selector:
     app: kube-app
-    tier: mysql
+    tier: mongo
   clusterIP: None
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kube-app-mysql
+  name: kube-app-mongo
   labels:
     app: kube-app
 spec:
   selector:
     matchLabels:
       app: kube-app
-      tier: mysql
+      tier: mongo
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
         app: kube-app
-        tier: mysql
+        tier: mongo
     spec:
       containers:
-      - image: mysql:5.6
-        name: mysql
-        env:
-        - name: MYSQL_ROOT_PASSWORD 
-          valueFrom:               
-            secretKeyRef:
-              name: mysql-root-pass
-              key: password
-        - name: MYSQL_DATABASE
-          valueFrom:
-            secretKeyRef:
-              name: mysql-db-url
-              key: database
-        - name: MYSQL_USER
-          valueFrom:
-            secretKeyRef:
-              name: mysql-user-pass
-              key: username
-        - name: MYSQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mysql-user-pass
-              key: password
+      - image: mongo:4.0.4
+        name: mongo
         ports:
-        - containerPort: 3306        
-          name: mysql
+        - containerPort: 27017        
+          name: mongo
         volumeMounts:
-        - name: mysql-persistent-storage  
-          mountPath: /var/lib/mysql
+        - name: mongo-persistent-storage  
+          mountPath: /data/db
       volumes:                       
-      - name: mysql-persistent-storage
+      - name: mongo-persistent-storage
         persistentVolumeClaim:
-          claimName: mysql-pv-claim
+          claimName: mongo-pv-claim

@@ -1,27 +1,21 @@
 package com.template.kube.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import lombok.Getter;
-import lombok.Setter;
 
-@Entity
-@Getter
-@Setter
+@Document(collection = "persons")
 public class Person {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Transient
+    public static final String SEQUENCE_NAME = "persons_sequence";
 
-    @NotNull
+    @Id
+    private Long id;
+    
     private String name;
 
-    @NotNull
     private Integer age;
 
     public Person() {

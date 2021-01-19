@@ -11,7 +11,7 @@ secretGenerator:
     - username=person
     - password=person 
 resources:
-  - mysql-deployment.yaml
+  - mongo-deployment.yaml
   - kube-server-deployment.yaml
   - kube-client-deployment.yaml  
   - ingress.yaml
