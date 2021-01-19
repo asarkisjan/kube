@@ -1,15 +1,8 @@
 secretGenerator:
-  - name: mysql-db-url
+  - name: mongo-db-uri
     literals:
     - database=kube_db
-    - url=jdbc:mysql://kube-app-mysql:3306/kube_db
-  - name: mysql-root-pass
-    literals:
-    - password=root
-  - name: mysql-user-pass
-    literals:
-    - username=person
-    - password=person 
+    - uri=mongodb://kube-app-mongo/kube_db
 resources:
   - mongo-deployment.yaml
   - kube-server-deployment.yaml

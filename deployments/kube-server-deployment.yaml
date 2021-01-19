@@ -27,7 +27,10 @@ spec:
             memory: "200Mi"
         env:                  
           - name: MONGO_URI
-            value: "mongodb://kube-app-mongo/kube_db"
+            valueFrom:               
+              secretKeyRef:
+                name: mongo-db-uri
+                key: uri
 ---
 apiVersion: v1          
 kind: Service                 
