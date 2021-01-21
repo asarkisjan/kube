@@ -64,13 +64,77 @@ spec:
       containers:
       - image: mongo:4.0.4
         name: mongo
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME 
+          valueFrom:               
+            secretKeyRef:
+              name: mongo-db-secret
+              key: rootuser
+        - name: MONGO_INITDB_ROOT_PASSWORD 
+          valueFrom:               
+            secretKeyRef:
+              name: mongo-db-secret
+              key: rootpassword
+        - name: MONGO_INITDB_DATABASE 
+          valueFrom:               
+            secretKeyRef:
+              name: mongo-db-secret
+              key: database
         ports:
         - containerPort: 27017        
           name: mongo
         volumeMounts:
         - name: mongo-persistent-storage  
           mountPath: /data/db
+        - name: mongodb-scripts
+          mountPath: /docker-entrypoint-initdb.d
+          readOnly: true
+        - name: mongo-db-secret
+          mountPath: /etc/mongo-db-secret
+          readOnly: true
       volumes:                       
       - name: mongo-persistent-storage
         persistentVolumeClaim:
           claimName: mongo-pv-claim
+      - name: mongo-db-secret
+        secret:
+          secretName: mongo-db-secret
+          items:
+          - key: user
+            path: MONGO_USERNAME
+            mode: 0444
+          - key: password
+            path: MONGO_PASSWORD
+            mode: 0444
+          - key: database
+            path: MONGO_DATABASE
+            mode: 0444
+      - name: mongodb-scripts
+        configMap:
+          name: monogodb-config
+          items:
+          - key: init-mongo.js
+            path: init-mongo.js
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: monogodb-config
+data:
+  init-mongo.js: |
+    const user = cat('/etc/mongo-db-secret/MONGO_USERNAME');
+    const pwd = cat('/etc/mongo-db-secret/MONGO_PASSWORD');
+    const db = cat('/etc/mongo-db-secret/MONGO_DATABASE');
+
+    db.createUser(
+        {
+            user: user,
+            pwd: pwd,
+            roles:[
+                {
+                    role: "readWrite",
+                    db:   db
+                }
+            ]
+        }
+    );

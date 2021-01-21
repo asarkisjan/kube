@@ -1,10 +1,19 @@
 secretGenerator:
-  - name: mongo-db-uri
+  - name: mongo-db-secret
     literals:
     - database=kube_db
-    - uri=mongodb://kube-app-mongo/kube_db
+    - rootuser=root
+    - rootpassword=passwort
+    - user=usertest
+    - password=pwdtest
+  - name: mongo-express-secret
+    literals:
+    - adminusername=dev
+    - adminpassword=dev
+namespace: app
 resources:
+  - namespace.yaml
   - mongo-deployment.yaml
-  - kube-server-deployment.yaml
-  - kube-client-deployment.yaml  
-  - ingress.yaml
+ # - kube-server-deployment.yaml
+ # - kube-client-deployment.yaml  
+ # - ingress.yaml
