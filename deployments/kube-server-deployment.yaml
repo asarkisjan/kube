@@ -16,7 +16,7 @@ spec:
     spec:                     
       containers:
       - name: kube-app-server
-        image: asarkisjan/kube-server:2.0.0
+        image: asarkisjan/kube-server:3.0.1
         imagePullPolicy: IfNotPresent
         ports:
           - name: http
@@ -26,11 +26,14 @@ spec:
             cpu: '0.2'
             memory: "200Mi"
         env:                  
-          - name: MONGO_URI
-            valueFrom:               
-              secretKeyRef:
-                name: mongo-db-uri
-                key: uri
+          - name: SPRING_DATA_MONGODB_HOST
+            value: kube-app-mongo
+          - name: SPRING_DATA_MONGODB_USERNAME
+            value: usertest
+          - name: SPRING_DATA_MONGODB_PASSWORD
+            value: pwdtest
+          - name: SPRING_DATA_MONGODB_DATABASE
+            value: kube_db
 ---
 apiVersion: v1          
 kind: Service                 

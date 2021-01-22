@@ -6,14 +6,8 @@ secretGenerator:
     - rootpassword=passwort
     - user=usertest
     - password=pwdtest
-  - name: mongo-express-secret
-    literals:
-    - adminusername=dev
-    - adminpassword=dev
-namespace: app
 resources:
-  - namespace.yaml
   - mongo-deployment.yaml
- # - kube-server-deployment.yaml
- # - kube-client-deployment.yaml  
- # - ingress.yaml
+  - kube-server-deployment.yaml
+  - kube-client-deployment.yaml  
+  - ingress.yaml

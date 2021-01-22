@@ -5,7 +5,7 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: standard
+  storageClassName: manual
   capacity:
     storage: 250Mi
   accessModes:
@@ -21,7 +21,7 @@ metadata:
   labels:
     app: kube-app
 spec:
-  storageClassName: standard
+  storageClassName: manual
   accessModes:
     - ReadWriteOnce
   resources:
@@ -62,7 +62,7 @@ spec:
         tier: mongo
     spec:
       containers:
-      - image: mongo:4.0.4
+      - image: mongo:4.4.3
         name: mongo
         env:
         - name: MONGO_INITDB_ROOT_USERNAME 
@@ -121,19 +121,18 @@ kind: ConfigMap
 metadata:
   name: monogodb-config
 data:
+  mongo.conf: |
+    storage:
+      dbPath: /data/db
   init-mongo.js: |
-    const user = cat('/etc/mongo-db-secret/MONGO_USERNAME');
-    const pwd = cat('/etc/mongo-db-secret/MONGO_PASSWORD');
-    const db = cat('/etc/mongo-db-secret/MONGO_DATABASE');
-
     db.createUser(
         {
-            user: user,
-            pwd: pwd,
+            user: cat('/etc/mongo-db-secret/MONGO_USERNAME'),
+            pwd: cat('/etc/mongo-db-secret/MONGO_PASSWORD'),
             roles:[
                 {
                     role: "readWrite",
-                    db:   db
+                    db:   cat('/etc/mongo-db-secret/MONGO_DATABASE')
                 }
             ]
         }

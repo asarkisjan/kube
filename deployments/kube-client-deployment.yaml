@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: kube-app-client
-        image: asarkisjan/kube-client:2.0.0
+        image: asarkisjan/kube-client:3.0.1
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
